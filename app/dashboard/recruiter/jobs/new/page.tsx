@@ -1,6 +1,8 @@
 import Link from "next/link"
 
-import { JobForm } from "@/components/dashboard/job-form"
+import { ArrowRight } from "lucide-react"
+
+import { JobForm, RECRUITER_JOB_FORM_ID } from "@/components/dashboard/job-form"
 import { PageHeader } from "@/components/dashboard/page-shell"
 import { getMyCompany } from "@/lib/api/companies"
 import { requireUser } from "@/lib/core/server"
@@ -38,12 +40,14 @@ export default async function NewJobPage() {
         title="Post a New Job"
         subtitle="Fill in the position specifications to attract qualified talent across our network."
         action={
-          <Link
-            href="#publish-job"
-            className="primary-button h-10 px-4 text-xs"
+          <button
+            type="submit"
+            form={RECRUITER_JOB_FORM_ID}
+            className="primary-button h-11 px-6 text-[13px]"
           >
             Publish Job
-          </Link>
+            <ArrowRight aria-hidden className="size-4" />
+          </button>
         }
       />
 

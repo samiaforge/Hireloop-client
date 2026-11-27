@@ -1,14 +1,18 @@
 "use server"
 
+import { FIGMA_JOBS, filterFigmaJobs } from "@/lib/data/figma-jobs"
 import { apiRequest, publicRequest } from "@/lib/core/server"
 import type { JobFormData, JobRow } from "@/lib/types/jobs"
 
 export async function getJobs(query = ""): Promise<JobRow[]> {
-  return publicRequest<JobRow[]>(`/jobs${query ? `?${query}` : ""}`)
+  const jobs = await publicRequest<JobRow[]>(`/jobs${query ? `?${query}` : ""}`).catch(() => [])
+  return jobs.length ? jobs : filterFigmaJobs(query)
 }
 
 export async function getJobById(jobId: string): Promise<JobRow | null> {
-  return publicRequest<JobRow | null>(`/jobs/${encodeURIComponent(jobId)}`)
+  const job = await publicRequest<JobRow | null>(`/jobs/${encodeURIComponent(jobId)}`).catch(() => null)
+  if (job) return job
+  return FIGMA_JOBS.find((item) => item._id === jobId) ?? null
 }
 
 export async function getMyJobs(): Promise<JobRow[]> {

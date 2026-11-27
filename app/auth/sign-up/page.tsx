@@ -48,7 +48,7 @@ export default function SignupPage() {
         email: formData.email,
         password: formData.password,
         role: formData.role,
-        callbackURL: "/",
+        callbackURL: "/dashboard",
       })
 
       if (error) {
@@ -61,7 +61,7 @@ export default function SignupPage() {
 
       toast.success("Account created successfully!")
 
-      router.push("/")
+      router.push("/dashboard")
       router.refresh()
     } catch (err) {
       console.error("Unexpected signup error:", err)

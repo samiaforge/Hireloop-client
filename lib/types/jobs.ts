@@ -2,7 +2,15 @@
 // new-job form (`dashboard/recruiter/jobs/new`), the manage-jobs table
 // (`dashboard/recruiter/jobs`), and the jobs API layer (`lib/api/jobs`).
 
-export type JobType = "full-time" | "part-time" | "contract" | "internship"
+export type JobType =
+    | "full-time"
+    | "part-time"
+    | "contract"
+    | "internship"
+    /** Figma browse cards also show these labels. */
+    | "hybrid"
+    | "senior"
+    | "freelance"
 export type JobStatus = "active" | "closed" | "draft" | "expired"
 
 // Flat form data, keys mirror the Figma layer names (isRemote, deadline, minSalary…).

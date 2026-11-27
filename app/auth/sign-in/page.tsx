@@ -48,8 +48,9 @@ export default function SignInPage() {
 
       toast.success("Welcome back! Login successful.");
 
-      // Redirect to homepage after successful login
-      router.replace("/");
+      // Send every user to their role dashboard; /dashboard resolves recruiters
+      // to /dashboard/recruiter before any public page is shown.
+      router.replace("/dashboard");
       router.refresh();
 
     } catch (err) {

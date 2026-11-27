@@ -12,6 +12,7 @@ import {
   Home,
   LayoutDashboard,
   LogOut,
+  Plus,
   Settings,
   Users,
   Wallet,
@@ -40,6 +41,12 @@ const DASHBOARD_HOME: Record<UserRole, string> = {
   admin: "/dashboard/admin",
 }
 
+const WORKSPACE_SUBTITLE: Record<UserRole, string> = {
+  seeker: "Job Seeker",
+  recruiter: "Recruiter",
+  admin: "Admin Console",
+}
+
 const MENU: Record<UserRole, MenuItem[]> = {
   seeker: [
     { name: "Dashboard", url: "/dashboard/seeker", icon: LayoutDashboard },
@@ -51,7 +58,7 @@ const MENU: Record<UserRole, MenuItem[]> = {
   ],
   recruiter: [
     { name: "Dashboard", url: "/dashboard/recruiter", icon: LayoutDashboard },
-    { name: "My Company", url: "/dashboard/recruiter/company", icon: Building2 },
+    { name: "Add Job", url: "/dashboard/recruiter/jobs/new", icon: Plus },
     { name: "Manage Jobs", url: "/dashboard/recruiter/jobs", icon: BriefcaseBusiness },
     { name: "Applications", url: "/dashboard/recruiter/applications", icon: FileText },
     { name: "Settings", url: "/dashboard/recruiter/settings", icon: Settings },
@@ -110,7 +117,9 @@ export function DashboardSidebar() {
           <Link href={DASHBOARD_HOME[role]} aria-label="Hireloop dashboard">
             <Image src="/images/logo.png" alt="Hireloop" width={154} height={44} priority className="h-10 w-auto" />
           </Link>
-          <p className="pl-1 text-[11px] tracking-[0.16em] text-[#6E6E78] uppercase">Admin Console</p>
+          <p className="pl-1 text-[11px] tracking-[0.16em] text-[#6E6E78] uppercase">
+            {WORKSPACE_SUBTITLE[role]}
+          </p>
         </div>
 
         <div className="flex items-center gap-3 rounded-lg border border-white/10 bg-[#141414] p-3">

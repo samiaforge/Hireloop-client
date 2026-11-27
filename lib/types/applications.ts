@@ -58,4 +58,6 @@ export type ApplicationFormData = {
 // Saved document: payload + the fields only the applications table needs.
 export type ApplicationRow = ApplicationFormData & {
     _id: string
+    /** Optional candidate experience shown in the recruiter dashboard table. */
+    experience?: string
 }

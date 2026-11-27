@@ -33,7 +33,7 @@ export function PageHeader({
 }: {
     overline?: string
     title: string
-    subtitle: string
+    subtitle?: string
     /** Right side element (e.g. a "New Job Post" Link). */
     action?: React.ReactNode
 }) {
@@ -42,7 +42,7 @@ export function PageHeader({
             <div className="flex flex-col gap-1.5">
                 {overline ? <p className="overline-label">{overline}</p> : null}
                 <h1 className="page-title">{title}</h1>
-                <p className="text-sm text-white/60">{subtitle}</p>
+                {subtitle ? <p className="text-sm text-white/60">{subtitle}</p> : null}
             </div>
             {action}
         </header>

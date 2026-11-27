@@ -1,14 +1,18 @@
 "use server"
 
+import { FIGMA_COMPANIES } from "@/lib/data/figma-jobs"
 import { apiRequest, publicRequest } from "@/lib/core/server"
 import type { CompanyRow } from "@/lib/types/domain"
 
 export async function getCompanies(query = ""): Promise<CompanyRow[]> {
-  return publicRequest<CompanyRow[]>(`/companies${query ? `?${query}` : ""}`)
+  const companies = await publicRequest<CompanyRow[]>(`/companies${query ? `?${query}` : ""}`).catch(() => [])
+  return companies.length ? companies : FIGMA_COMPANIES
 }
 
 export async function getCompanyById(id: string): Promise<CompanyRow | null> {
-  return publicRequest<CompanyRow | null>(`/companies/${encodeURIComponent(id)}`)
+  const company = await publicRequest<CompanyRow | null>(`/companies/${encodeURIComponent(id)}`).catch(() => null)
+  if (company) return company
+  return FIGMA_COMPANIES.find((item) => item._id === id) ?? null
 }
 
 export async function getMyCompany(): Promise<CompanyRow | null> {

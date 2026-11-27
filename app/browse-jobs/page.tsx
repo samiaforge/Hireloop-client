@@ -5,6 +5,7 @@ import { ChevronLeft, ChevronRight } from "lucide-react"
 import { SiteNavbar } from "@/components/site-navbar"
 import JobCard from "@/components/job-card"
 import { getJobs } from "@/lib/api/jobs"
+import { FIGMA_JOBS, FIGMA_TOTAL_JOBS } from "@/lib/data/figma-jobs"
 
 import { JobFiltersPanel } from "./_components/job-filters-panels"
 import { JobSearchBar } from "./_components/job-search-bar"
@@ -46,9 +47,12 @@ export default async function BrowseJobsPage({ searchParams }: { searchParams: S
         return new Date(b.createdAt || 0).getTime() - new Date(a.createdAt || 0).getTime()
     })
 
-    const totalPages = Math.max(1, Math.ceil(sortedJobs.length / PAGE_SIZE))
+    const isFigmaDemo =
+        sortedJobs.length === FIGMA_JOBS.length && sortedJobs.every((item) => item._id.startsWith("figma-"))
+    const totalPages = isFigmaDemo ? 5 : Math.max(1, Math.ceil(sortedJobs.length / PAGE_SIZE))
     const page = Math.min(Math.max(requestedPage, 1), totalPages)
-    const visibleJobs = sortedJobs.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE)
+    const visibleJobs = isFigmaDemo ? sortedJobs : sortedJobs.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE)
+    const resultCount = isFigmaDemo ? FIGMA_TOTAL_JOBS : jobs.length
 
     const pageHref = (target: number) => {
         const next = new URLSearchParams()
@@ -81,7 +85,7 @@ export default async function BrowseJobsPage({ searchParams }: { searchParams: S
 
                     <section className="min-w-0">
                         <div className="flex flex-wrap items-center justify-between gap-4">
-                            <h2 className="section-title">Found {jobs.length.toLocaleString()} Professional Jobs</h2>
+                            <h2 className="section-title">Found {resultCount.toLocaleString()} Professional Jobs</h2>
                             <Suspense fallback={<div className="h-9 w-40 animate-pulse rounded-lg bg-white/5" />}>
                                 <JobSortSelect defaultValue={sort} />
                             </Suspense>
