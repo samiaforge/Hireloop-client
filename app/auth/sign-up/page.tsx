@@ -5,6 +5,7 @@ import { useState } from "react"
 import { useRouter } from "next/navigation"
 import toast from "react-hot-toast"
 import { authClient } from "@/lib/auth-client"
+import { GoogleAuthButton } from "@/components/google-auth-button"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import {
   faUser,
@@ -82,6 +83,20 @@ export default function SignupPage() {
           <p className="mt-2 text-sm text-gray-400">
             Join HireLoop and find your next opportunity.
           </p>
+        </div>
+
+        <div className="mb-6">
+          <GoogleAuthButton
+            label="Sign up with Google"
+            disabled={loading}
+            requestSignUp
+          />
+        </div>
+
+        <div className="mb-6 flex items-center gap-3 text-xs text-gray-500">
+          <span className="h-px flex-1 bg-white/10" />
+          <span>or sign up with email</span>
+          <span className="h-px flex-1 bg-white/10" />
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">

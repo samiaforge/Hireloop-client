@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import { Eye, EyeOff } from "lucide-react";
 import toast from "react-hot-toast";
 import { authClient } from "@/lib/auth-client";
+import { GoogleAuthButton } from "@/components/google-auth-button";
 
 export default function SignInPage() {
   const router = useRouter();
@@ -72,6 +73,16 @@ export default function SignInPage() {
           <p className="mt-2 text-sm text-gray-400">
             Sign in to continue your journey with HireLoop.
           </p>
+        </div>
+
+        <div className="mb-6">
+          <GoogleAuthButton label="Continue with Google" disabled={loading} />
+        </div>
+
+        <div className="mb-6 flex items-center gap-3 text-xs text-gray-500">
+          <span className="h-px flex-1 bg-white/10" />
+          <span>or sign in with email</span>
+          <span className="h-px flex-1 bg-white/10" />
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-5">
