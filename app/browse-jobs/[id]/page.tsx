@@ -3,6 +3,7 @@ import Link from "next/link"
 import { ArrowRight } from "lucide-react"
 
 import { SiteNavbar } from "@/components/site-navbar"
+import { getCompanyById } from "@/lib/api/companies"
 import { getJobById, getJobs } from "@/lib/api/jobs"
 import JobCard from "@/components/job-card"
 
@@ -17,6 +18,10 @@ export default async function JobDetailsPage({ params }: { params: Promise<{ id:
   const { id } = await params
   const job = await getJobById(id).catch(() => null)
   if (!job) notFound()
+
+  const company = job.companyId
+    ? await getCompanyById(job.companyId).catch(() => null)
+    : null
 
   let similar: Awaited<ReturnType<typeof getJobs>> = []
   try {
@@ -38,7 +43,7 @@ export default async function JobDetailsPage({ params }: { params: Promise<{ id:
             <JobContentCard job={job} />
           </div>
           <div>
-            <CompanyOverviewCard job={job} />
+            <CompanyOverviewCard job={job} company={company} />
           </div>
         </div>
 

@@ -1,16 +1,14 @@
 // Sidebar filters for the Browse Jobs page — from the Figma
 // "Aside - Sidebar Filters" (labels 13px #A0A0AB, counts #6E6E78,
 // filter groups stacked in one #141418 card).
-//
-// Job Type and Job Category are single-select (radio inputs); Work
-// Arrangement is a multi-select checkbox. Counts are computed at render
-// from the current job list. Selection only flips visually — no query
-// params, no list filtering (wired up separately).
 
 import { FilterChecklist, type FilterOption } from "@/components/shared/filter-checklist"
-import { JOB_CATEGORIES, JOB_TYPES, type JobRow } from "@/lib/types/jobs"
+import { JOB_CATEGORIES, type JobRow } from "@/lib/types/jobs"
 
-/** Job counts per facet, mirrored in the Figma sidebar ("Full-time  1.2k"). */
+/** Figma sidebar uses "1.2k" style counts. */
+const compactCount = (value: number) =>
+    value >= 1000 ? `${(value / 1000).toFixed(1).replace(/\.0$/, "")}k` : String(value)
+
 const countOptions = (
     facet: (job: JobRow) => string,
     allOptions: readonly string[],
@@ -19,10 +17,26 @@ const countOptions = (
     allOptions.map((option) => ({
         value: option,
         label: option,
-        count: jobs.filter((job) => facet(job) === option).length,
+        count: compactCount(jobs.filter((job) => facet(job) === option).length),
     }))
 
-export function JobFiltersPanel({ jobs }: { jobs: readonly JobRow[] }) {
+const BROWSE_JOB_TYPES = [
+    { value: "full-time", label: "Full-time" },
+    { value: "contract", label: "Contract" },
+    { value: "freelance", label: "Freelance" },
+]
+
+export function JobFiltersPanel({
+    jobs,
+    selectedJobType = [],
+    selectedCategory = [],
+    selectedRemote = [],
+}: {
+    jobs: readonly JobRow[]
+    selectedJobType?: readonly string[]
+    selectedCategory?: readonly string[]
+    selectedRemote?: readonly string[]
+}) {
     return (
         <section className="surface-card p-6">
             <h2 className="text-[22px] font-semibold tracking-[-0.02em] text-[#EDEDEF]">Filters</h2>
@@ -32,19 +46,30 @@ export function JobFiltersPanel({ jobs }: { jobs: readonly JobRow[] }) {
                     legend="Job Type"
                     name="jobType"
                     multiple={false}
-                    options={countOptions((job) => job.jobType, JOB_TYPES, jobs)}
+                    defaultValue={selectedJobType}
+                    options={BROWSE_JOB_TYPES.map(({ value, label }) => ({
+                        value,
+                        label,
+                        count: compactCount(jobs.filter((job) => job.jobType === value).length),
+                    }))}
                 />
                 <FilterChecklist
                     legend="Job Category"
                     name="category"
                     multiple={false}
+                    defaultValue={selectedCategory}
                     options={countOptions((job) => job.category, JOB_CATEGORIES, jobs)}
                 />
                 <FilterChecklist
                     legend="Work Arrangement"
                     name="isRemote"
+                    defaultValue={selectedRemote}
                     options={[
-                        { value: "remote", label: "Remote only", count: jobs.filter((job) => job.isRemote).length },
+                        {
+                            value: "remote",
+                            label: "Remote only",
+                            count: compactCount(jobs.filter((job) => job.isRemote).length),
+                        },
                     ]}
                 />
             </div>

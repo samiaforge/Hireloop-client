@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import { useRouter } from "next/navigation"
-import { Bookmark } from "lucide-react"
+import { Bookmark, CheckCircle2 } from "lucide-react"
 
 import { toast } from "@/components/ui/toast"
 import { useSession } from "@/lib/auth-client"
@@ -102,18 +102,14 @@ export function JobHeaderCard({ job }: { job: JobRow }) {
 
         <div className="min-w-0">
           <h1 className="text-[32px] leading-10 font-semibold tracking-[-0.02em] text-[#EDEDEF]">{job.title}</h1>
-          <div className="mt-4 flex flex-wrap items-center gap-x-6 gap-y-2">
+          <div className="mt-4 flex flex-wrap items-center gap-x-4 gap-y-2">
             <span className="text-[22px] font-semibold text-[#A0A0AB]">{job.companyName}</span>
             {job.companyId ? (
-              <span className="rounded-full border border-[#22C55E]/30 bg-[#22C55E]/10 px-2 py-0.5 text-[11px] text-[#4ADE80]">
+              <span className="inline-flex items-center gap-1.5 rounded-full border border-[#22C55E]/30 bg-[#22C55E]/10 px-2.5 py-1 text-[11px] text-[#4ADE80]">
+                <CheckCircle2 aria-hidden className="size-3.5" />
                 Verified Employer
               </span>
             ) : null}
-            <span className="capitalize text-base text-[#EDEDEF]">
-              {job.location}
-              {job.isRemote ? " (Remote)" : ""}
-            </span>
-            <span className="capitalize text-base text-[#EDEDEF]">{job.jobType}</span>
           </div>
         </div>
       </div>

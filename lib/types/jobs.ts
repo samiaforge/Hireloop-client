@@ -43,4 +43,10 @@ export type JobRow = JobFormData & {
     _id: string
     /** Relativized post date, e.g. "Posted 4d ago". */
     posted: string
+    /** Optional details used by the public job-detail screen. */
+    createdAt?: string
+    description?: string
+    experience?: string
+    benefits?: string
+    skills?: string[]
 }

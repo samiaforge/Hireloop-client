@@ -7,6 +7,24 @@ import type { JobFormData } from "@/lib/types/jobs"
 export const formatCompensation = (job: JobFormData) =>
     `€${job.minSalary} – €${job.maxSalary} / ${job.salaryFrequency.replace("per ", "")}`
 
+/** Public job cards use the compact Figma format: "$140k - $180k". */
+export const formatPublicSalary = (job: JobFormData) => {
+    const min = Number(job.minSalary)
+    const max = Number(job.maxSalary)
+    if (Number.isNaN(min) || Number.isNaN(max)) return formatCompensation(job)
+
+    const compact = (value: number) =>
+        value >= 1000 ? `$${Math.round(value / 1000)}k` : `$${value}`
+
+    return `${compact(min)} - ${compact(max)}`
+}
+
+/** Avoid "San Francisco, CA (Remote) (Remote)" when the data already says Remote. */
+export const formatJobLocation = (job: Pick<JobFormData, "location" | "isRemote">) => {
+    if (!job.isRemote) return job.location
+    return /remote/i.test(job.location) ? job.location : `Remote (${job.location})`
+}
+
 /** "2025-05-30" → "May 30, 2025". Fixed en-US so SSR and client agree. */
 export const formatDeadline = (deadline: string) =>
     new Date(deadline).toLocaleDateString("en-US", { month: "short", day: "2-digit", year: "numeric" })

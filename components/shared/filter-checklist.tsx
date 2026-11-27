@@ -1,19 +1,13 @@
-// Option list used by the Browse Jobs sidebar filters ("Job Type",
-// "Job Category"…). Same sr-only-input pattern as PillGroup.
-//
-// The inputs are uncontrolled native inputs (`name` + `value`): they
-// toggle visually on click and nothing else. No URL/query updates
-// happen here — wrap them in one GET form and read `FormData` when
-// implementing server-side filtering.
 'use client'
-import { useRouter } from "next/navigation"
+
+import { usePathname, useRouter, useSearchParams } from "next/navigation"
 import { Check } from "lucide-react"
 
 export type FilterOption = {
     value: string
     label: string
     /** Shown right-aligned as in the Figma sidebar (e.g. "1.2k"). */
-    count?: number
+    count?: string | number
 }
 
 export function FilterChecklist({
@@ -32,18 +26,28 @@ export function FilterChecklist({
     /** Option values checked on first render. */
     defaultValue?: readonly string[]
 }) {
+    const router = useRouter()
+    const pathname = usePathname()
+    const params = useSearchParams()
     const inputType = multiple ? "checkbox" : "radio"
 
-    const router = useRouter()
-
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        console.log(name, event.target.value)
+        const next = new URLSearchParams(params.toString())
 
-        const params = new URLSearchParams(window.location.search)
-        params.set(name, event.target.value)
+        if (multiple) {
+            const selected = next.getAll(name)
+            next.delete(name)
 
-        router.push(`/browse-jobs?${params.toString()}`)
-        
+            const updated = selected.includes(event.target.value)
+                ? selected.filter((value) => value !== event.target.value)
+                : [...selected, event.target.value]
+
+            for (const value of updated) next.append(name, value)
+        } else {
+            next.set(name, event.target.value)
+        }
+
+        router.push(`${pathname}?${next.toString()}`)
     }
 
     return (
